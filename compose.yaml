@@ -1,0 +1,24 @@
+services:
+  practice:
+    build: .
+    command: ["--public-origin", "https://${DOMAIN:?Set DOMAIN in .env}"]
+    volumes:
+      - practice_data:/data
+    restart: unless-stopped
+  caddy:
+    image: caddy:2-alpine
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    depends_on: [practice]
+volumes:
+  practice_data:
+  caddy_data:
+  caddy_config:

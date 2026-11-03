@@ -1,0 +1,3 @@
+{$DOMAIN} {
+    reverse_proxy practice:8000
+}

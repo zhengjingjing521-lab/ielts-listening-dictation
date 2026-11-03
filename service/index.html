@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta name="practice-scope" content="__PRACTICE_SCOPE__"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>听写练习与记录</title><link rel="stylesheet" href="/style.css"></head>
+<body><main id="app">
+<header class="app-header"><h1>雅思听写</h1><nav aria-label="页面"><button id="sheet-tab" aria-pressed="true">表格练习</button><button id="practice-tab" aria-pressed="false">逐词听写</button><button id="records-tab" aria-pressed="false">练习记录 <span id="record-count">0</span></button></nav><span id="save-status" class="muted" role="status">正在读取…</span></header>
+<p id="error" role="alert" hidden></p>
+<section id="sheet">
+ <div class="word-search-tools"><div class="sheet-scope" role="group" aria-label="练习范围"><button id="wordbook-back" type="button" aria-pressed="true">全部词表</button><button id="wordbook-open" type="button" aria-pressed="false" disabled>错词本 <span id="wordbook-count">0</span></button></div><div class="search-field"><label class="sr-only" for="word-search-input">搜索全部词表</label><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input id="word-search-input" type="search" placeholder="搜索全部词表…" autocomplete="off" spellcheck="false" maxlength="120" aria-controls="word-search-results"><button id="word-search-clear" type="button" aria-label="清除搜索" title="清除搜索" hidden>×</button></div></div>
+ <div id="word-search-panel" hidden><p id="word-search-count" class="muted" role="status"></p><ul id="word-search-results"></ul><button id="word-search-more" type="button" hidden>显示更多结果</button></div>
+ <div class="wordbook-status-row" hidden><span id="wordbook-status" class="muted" role="status">正在读取错词本…</span><button id="wordbook-retry" type="button" hidden>重试同步</button></div>
+ <div id="wordbook-undo-row" hidden><span id="wordbook-undo-label" role="status" aria-live="polite"></span><button id="wordbook-undo" type="button">撤销</button></div>
+ <div class="sheet-tools">
+  <div id="sheet-pickers" class="pickers"><label><span class="sr-only">词表</span><select id="sheet-unit"></select></label><label><span class="sr-only">分组</span><select id="sheet-group"></select></label></div>
+  <details id="sheet-settings"><summary>练习设置<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><div class="sheet-settings-panel">
+  <label class="sheet-chk"><input type="checkbox" id="sheet-count"> 首次作答计分</label>
+  <label class="sheet-chk"><input type="checkbox" id="sheet-masken"> 遮英文</label>
+  <label class="sheet-chk"><input type="checkbox" id="sheet-maskzh"> 遮中文</label>
+  <label class="sheet-chk"><input type="checkbox" id="sheet-writezh"> 写中文</label>
+  <label class="sheet-chk" title="看词学习先读英文，再读中文释义；听写只读英文。"><input type="checkbox" id="sheet-autoplay" checked> 自动发音</label>
+  <label class="sheet-chk">重复<select id="sheet-repeat"><option value="0">不重复</option><option value="1">1 秒</option><option value="2">2 秒</option><option value="3">3 秒</option><option value="4">4 秒</option><option value="5">5 秒</option></select></label>
+  <label class="sheet-chk">缩放<select id="sheet-zoom"><option value="100">100%</option><option value="110">110%</option><option value="125">125%</option><option value="150">150%</option></select></label>
+  <span id="sheet-score" class="muted"></span>
+  <button id="sheet-cleargroup" class="sheet-mini" type="button">清空本组</button>
+  </div></details>
+  <button id="sheet-review" hidden>复习错题 <span id="sheet-bad-count">0</span></button>
+ </div>
+ <div class="sheet-wrap"><table id="sheet-table"><thead><tr><th>#</th><th>单词 <small class="key-hint">↑↓ 换词</small></th><th>发音</th><th>中文</th><th>写英文</th><th class="sheet-cnhead">写中文</th><th>判定</th><th id="wordbook-column" hidden><span class="sr-only">移出错词本</span></th></tr></thead><tbody></tbody></table></div>
+ <p id="sheet-audio-error" class="bad" role="status" hidden></p>
+ <p id="sheet-note" class="muted"></p>
+</section>
+<section id="practice" hidden>
+ <div class="pickers"><label>词表<select id="unit"></select></label><label>分组<select id="group"></select></label></div>
+ <div class="route"><strong id="route"></strong><span id="range" class="muted"></span></div>
+ <p id="scope" class="muted"></p>
+ <div class="practice-card" id="question-card">
+  <div class="row between"><span id="counter"></span><div class="voices" role="group" aria-label="选择音色"><button data-voice="uk" aria-pressed="true">英音 Sonia</button><button data-voice="us" aria-pressed="false">美音 Jenny</button></div></div>
+  <div class="listen"><button id="play" class="primary">▶ 播放单词</button><button id="slow">慢速听 · 0.85×</button><span id="audio-status" class="muted" role="status"></span></div>
+  <label class="answer-label" for="answer">听到的单词</label>
+  <input id="answer" type="text" placeholder="在这里输入拼写" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="120">
+  <div id="inline-answer" hidden role="status" aria-live="polite"></div>
+  <p id="feedback" class="muted">提交前不提示字母数</p>
+  <div class="row" id="answer-actions"><button id="submit" class="primary">检查并记录</button><button id="skip">没听出来</button></div>
+  <div class="row" id="checked-actions" hidden><button id="retry">遮住再写一次</button><button id="next" class="primary">下一词 →</button></div>
+ </div>
+ <div class="practice-card" id="complete-card" hidden>
+  <h2 id="complete-title">本组已练完</h2>
+  <p id="complete-stats" class="muted"></p>
+  <div class="row"><button id="next-group" class="primary">下一组 →</button><button id="again-group">再练本组</button><button id="review-group">复练本组错词</button></div>
+ </div>
+ <p id="word-today" class="muted"></p>
+</section>
+<section id="records" hidden>
+ <div class="row between"><h2>每天练得怎么样</h2><button id="export">导出 Excel · 全部记录</button></div>
+ <div class="row filters"><label>日期 <input id="date" type="date"></label><button id="all-days">全部日期</button><span id="totals" class="muted"></span></div>
+ <p id="empty" class="empty">还没有练习记录。提交一次答案，就会在这里留下记录。</p>
+ <div class="table-wrap"><table id="summary"><thead><tr><th>日期</th><th>单词</th><th>练习次数</th><th>错误次数</th><th>当天第一次</th><th>最近一次</th><th>详情</th></tr></thead><tbody></tbody></table></div>
+ <div class="row between details-title"><h2 id="detail-title">每次的原始作答</h2><button id="clear-word" hidden>查看全部单词</button></div>
+ <div class="table-wrap"><table id="details"><thead><tr><th>时间（北京）</th><th>单词 / 分组</th><th>当时输入</th><th>结果</th><th>具体差别</th><th>听过的音色</th><th>方式</th></tr></thead><tbody></tbody></table></div>
+ <p class="muted footnote">每次提交单独留存。订正不会覆盖原记录；“未听出”也计入错误次数。Excel 是导出时的快照。</p>
+</section>
+<audio id="audio" preload="none"></audio>
+</main>
+<dialog id="wordbook-dialog" aria-labelledby="wordbook-dialog-title"><form id="wordbook-form"><h2 id="wordbook-dialog-title">加入错词本</h2><label for="wordbook-original">当时写成了什么（可不填）</label><input id="wordbook-original" type="text" maxlength="120" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="例如 enviroment"><p class="muted">保存原错误拼写，方便回看。答对后仍保留在错词本。</p><p id="wordbook-dialog-error" class="bad" role="alert"></p><div class="row"><button id="wordbook-save" type="button" class="primary">加入错词本</button><button id="wordbook-cancel" type="button">取消</button></div></form></dialog>
+<dialog id="wordbook-remove-dialog" aria-labelledby="wordbook-remove-title" aria-describedby="wordbook-remove-description"><form id="wordbook-remove-form"><h2 id="wordbook-remove-title">移出这个单词？</h2><p id="wordbook-remove-description" class="muted">移出后可以撤销，原错拼和练习记录都会保留。</p><p id="wordbook-remove-error" class="bad" role="alert"></p><div class="row"><button id="wordbook-remove-cancel" type="button" autofocus>取消</button><button id="wordbook-remove-confirm" type="button">确认移出</button></div></form></dialog>
+<script src="/storage.js"></script><script src="/word-search.js"></script><script src="/app.js"></script></body></html>

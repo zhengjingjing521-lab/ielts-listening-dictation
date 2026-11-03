@@ -1,0 +1,13 @@
+**
+!requirements.txt
+!run.py
+!service/
+!service/*.py
+!service/*.js
+!service/*.css
+!service/*.html
+!service/*.json
+!media/
+!media/uk.zip
+!media/us.zip
+!media/zh.zip

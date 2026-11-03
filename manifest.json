@@ -1,0 +1,9 @@
+{
+  "id": "ielts-listening-dictation",
+  "name": "雅思单词听写",
+  "version": "1.1.8",
+  "minAppVersion": "1.5.0",
+  "description": "离线英中跟读、全词表听写、错词本和 Excel 导出。",
+  "author": "IELTS Dictation contributors",
+  "isDesktopOnly": true
+}
